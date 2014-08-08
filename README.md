@@ -43,7 +43,7 @@ That works, but there are a few problems:
 - It's not testing that the `$scope.update()` method is setting the correct id (it cannot because it can't destinguish between the two calls)
 - It's difficult to read because the assertion is not defined in the same place as the test login
 
-jsmock, can be used to make this all a bit nice. First, create a mock of the `factmint.service.visualizationPlugin`:
+jsmock, can be used to make this all a bit nicer. First, create a mock of the `factmint.service.visualizationPlugin`:
 
       var mockVisualizationPluginService = factmint.mock({
         setPlugin: function(pluginId) {}
