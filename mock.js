@@ -56,10 +56,11 @@ factmint.mock = function(object, tools) {
       var result = object[methodName].apply(object, arguments);
       mock._invocationCounts[methodName].all++;
       
-      if (! mock._invocationCounts[methodName][arguments]) {
-        mock._invocationCounts[methodName][arguments] = 1;
+      var argumentsKey = JSON.stringify(arguments);
+      if (! mock._invocationCounts[methodName][argumentsKey]) {
+        mock._invocationCounts[methodName][argumentsKey] = 1;
       } else {
-        mock._invocationCounts[methodName][arguments]++;
+        mock._invocationCounts[methodName][argumentsKey]++;
       }
       
       if (mock._invocationCallbacks[methodName] instanceof Function) {
@@ -125,14 +126,19 @@ factmint.verify = function(mock) {
         }
       },
       withArguments: function() {
+		var invocationArguments = JSON.stringify(arguments);
         return {
           hasBeenInvoked: function(comparison) {
             if (comparison instanceof Function) {
-              return comparison(mock._invocationCounts[methodName][arguments]);
+              return comparison(mock._invocationCounts[methodName][invocationArguments]);
             } else if (typeof(comparison) == "number") {
-              return (comparison == mock._invocationCounts[methodName][arguments]);
+              if (comparison == 0 && typeof(mock._invocationCounts[methodName][invocationArguments]) === "undefined") {
+                return true;
+              }
+
+              return (comparison == mock._invocationCounts[methodName][invocationArguments]);
             } else if (! comparison) {
-              return mock._invocationCounts[methodName][arguments] > 0;
+              return mock._invocationCounts[methodName][invocationArguments] > 0;
             }
           }
         }
