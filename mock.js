@@ -45,13 +45,22 @@ factmint.mock = function(object, tools) {
   var registerMethod = function(methodName) {
     console.log("MOCK [DEBUG] - registering method " + methodName);
     
-    mock._invocationCounts[methodName] = 0;
+    mock._invocationCounts[methodName] = {
+      all: 0,
+      arguments: {}
+    };
     
     mock[methodName] = function() {
       console.log("MOCK [INFO] - Verifying execution of " + methodName);
       
       var result = object[methodName].apply(object, arguments);
-      mock._invocationCounts[methodName]++;
+      mock._invocationCounts[methodName].all++;
+      
+      if (! mock._invocationCounts[methodName][arguments]) {
+        mock._invocationCounts[methodName][arguments] = 1;
+      } else {
+        mock._invocationCounts[methodName][arguments]++;
+      }
       
       if (mock._invocationCallbacks[methodName] instanceof Function) {
         mock._invocationCallbacks[methodName](result, mock._invocationCounts[methodName]);
@@ -108,11 +117,24 @@ factmint.verify = function(mock) {
     verify[methodName] = {
       hasBeenInvoked: function(comparison) {
         if (comparison instanceof Function) {
-          return comparison(mock._invocationCounts[methodName]);
+          return comparison(mock._invocationCounts[methodName].all);
         } else if (typeof(comparison) == "number") {
-          return (comparison == mock._invocationCounts[methodName]);
+          return (comparison == mock._invocationCounts[methodName].all);
         } else if (! comparison) {
-          return mock._invocationCounts[methodName] > 0;
+          return mock._invocationCounts[methodName].all > 0;
+        }
+      },
+      withArguments: function() {
+        return {
+          hasBeenInvoked: function(comparison) {
+            if (comparison instanceof Function) {
+              return comparison(mock._invocationCounts[methodName][arguments]);
+            } else if (typeof(comparison) == "number") {
+              return (comparison == mock._invocationCounts[methodName][arguments]);
+            } else if (! comparison) {
+              return mock._invocationCounts[methodName][arguments] > 0;
+            }
+          }
         }
       },
       checkInvocations: function(callback) {
