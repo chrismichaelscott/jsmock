@@ -214,3 +214,7 @@ Both the `hasBeenInvoked` and `checkInvocation` methods can be be applied only w
     });
     myMock.resetPassword("secret"); // doesn't trigger checker
     myMock.resetPassword("p4ssw0rd"); // does trigger checker
+
+## Have a play
+
+[On codepen.io](http://codepen.io/chrismichaelscott/pen/IyAhG)
