@@ -1,0 +1,23 @@
+{
+  "name": "jsmock",
+  "version": "0.0.1",
+  "homepage": "https://github.com/chrismichaelscott/jsmock",
+  "authors": [
+    "chris.scott@factmint.com <chris.scott@factmint.com>"
+  ],
+  "description": "A light-weight JavaScript Object mocking toolkit",
+  "main": "mock.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "mock",
+    "test"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
+}
