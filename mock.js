@@ -69,6 +69,10 @@ factmint.mock = function(object, tools) {
 
       return result;
     };
+
+    mock[methodName].toString = function() {
+      return "factmint.mock of " + methodName;
+    }
   };
   
   for (var member in object) {
