@@ -66,6 +66,8 @@ factmint.mock = function(object, tools) {
       if (mock._invocationCallbacks[methodName] instanceof Function) {
         mock._invocationCallbacks[methodName](result, mock._invocationCounts[methodName]);
       }
+
+      return result;
     };
   };
   
