@@ -84,6 +84,14 @@ factmint.mock = function(object, tools) {
       mock._members.push(member);
     }
   }
+
+  mock.toString = function() {
+    return "\n   __         _         _     _                   _   " +
+           "\n  / _|__ _ __| |_ _ __ (_)_ _| |_   _ __  ___  __| |__" +
+           "\n |  _/ _` / _|  _| '  \| | ' \  _| | '  \/ _ \/ _| / /" +
+           "\n |_| \__,_\__|\__|_|_|_|_|_||_\__| |_|_|_\___/\__|_\_\" +
+           "\n ";
+  };
   
   return mock;
 };
