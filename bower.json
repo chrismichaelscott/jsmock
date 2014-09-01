@@ -8,7 +8,7 @@
   "description": "A light-weight JavaScript Object mocking toolkit",
   "main": "mock.js",
   "moduleType": [
-    "globals"
+    "amd"
   ],
   "keywords": [
     "mock",
