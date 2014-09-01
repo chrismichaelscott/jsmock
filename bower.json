@@ -19,5 +19,9 @@
     "**/.*",
     "node_modules",
     "bower_components"
-  ]
+  ],
+  "devDependencies": {
+  	"requirejs": "2.1.*",
+  	"qunit": "1.14.*"
+  }
 }
