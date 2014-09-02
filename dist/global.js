@@ -1,7 +1,710 @@
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        //Allow using this built library as an AMD module
+        //in another project. That other project will only
+        //see this AMD call, not the internal modules in
+        //the closure below.
+        define([], factory);
+    } else {
+        //Browser globals case. Just assign the
+        //result to a property on the global.
+        root['jsmock'] = factory();
+    }
+}(this, function () {
+    //almond, and your modules will be inlined here
 /**
  * @license almond 0.3.0 Copyright (c) 2011-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
  */
+//Going sloppy to avoid 'use strict' string cost, but strict practices should
+//be followed.
+/*jslint sloppy: true */
+/*global setTimeout: false */
 
-(function(e,t){typeof define=="function"&&define.amd?define([],t):e.jsmock=t()})(this,function(){var e,t,n;return function(r){function v(e,t){return h.call(e,t)}function m(e,t){var n,r,i,s,o,u,a,f,c,h,p,v=t&&t.split("/"),m=l.map,g=m&&m["*"]||{};if(e&&e.charAt(0)===".")if(t){v=v.slice(0,v.length-1),e=e.split("/"),o=e.length-1,l.nodeIdCompat&&d.test(e[o])&&(e[o]=e[o].replace(d,"")),e=v.concat(e);for(c=0;c<e.length;c+=1){p=e[c];if(p===".")e.splice(c,1),c-=1;else if(p===".."){if(c===1&&(e[2]===".."||e[0]===".."))break;c>0&&(e.splice(c-1,2),c-=2)}}e=e.join("/")}else e.indexOf("./")===0&&(e=e.substring(2));if((v||g)&&m){n=e.split("/");for(c=n.length;c>0;c-=1){r=n.slice(0,c).join("/");if(v)for(h=v.length;h>0;h-=1){i=m[v.slice(0,h).join("/")];if(i){i=i[r];if(i){s=i,u=c;break}}}if(s)break;!a&&g&&g[r]&&(a=g[r],f=c)}!s&&a&&(s=a,u=f),s&&(n.splice(0,u,s),e=n.join("/"))}return e}function g(e,t){return function(){var n=p.call(arguments,0);return typeof n[0]!="string"&&n.length===1&&n.push(null),s.apply(r,n.concat([e,t]))}}function y(e){return function(t){return m(t,e)}}function b(e){return function(t){a[e]=t}}function w(e){if(v(f,e)){var t=f[e];delete f[e],c[e]=!0,i.apply(r,t)}if(!v(a,e)&&!v(c,e))throw new Error("No "+e);return a[e]}function E(e){var t,n=e?e.indexOf("!"):-1;return n>-1&&(t=e.substring(0,n),e=e.substring(n+1,e.length)),[t,e]}function S(e){return function(){return l&&l.config&&l.config[e]||{}}}var i,s,o,u,a={},f={},l={},c={},h=Object.prototype.hasOwnProperty,p=[].slice,d=/\.js$/;o=function(e,t){var n,r=E(e),i=r[0];return e=r[1],i&&(i=m(i,t),n=w(i)),i?n&&n.normalize?e=n.normalize(e,y(t)):e=m(e,t):(e=m(e,t),r=E(e),i=r[0],e=r[1],i&&(n=w(i))),{f:i?i+"!"+e:e,n:e,pr:i,p:n}},u={require:function(e){return g(e)},exports:function(e){var t=a[e];return typeof t!="undefined"?t:a[e]={}},module:function(e){return{id:e,uri:"",exports:a[e],config:S(e)}}},i=function(e,t,n,i){var s,l,h,p,d,m=[],y=typeof n,E;i=i||e;if(y==="undefined"||y==="function"){t=!t.length&&n.length?["require","exports","module"]:t;for(d=0;d<t.length;d+=1){p=o(t[d],i),l=p.f;if(l==="require")m[d]=u.require(e);else if(l==="exports")m[d]=u.exports(e),E=!0;else if(l==="module")s=m[d]=u.module(e);else if(v(a,l)||v(f,l)||v(c,l))m[d]=w(l);else{if(!p.p)throw new Error(e+" missing "+l);p.p.load(p.n,g(i,!0),b(l),{}),m[d]=a[l]}}h=n?n.apply(a[e],m):undefined;if(e)if(s&&s.exports!==r&&s.exports!==a[e])a[e]=s.exports;else if(h!==r||!E)a[e]=h}else e&&(a[e]=n)},e=t=s=function(e,t,n,a,f){if(typeof e=="string")return u[e]?u[e](t):w(o(e,t).f);if(!e.splice){l=e,l.deps&&s(l.deps,l.callback);if(!t)return;t.splice?(e=t,t=n,n=null):e=r}return t=t||function(){},typeof n=="function"&&(n=a,a=f),a?i(r,e,t,n):setTimeout(function(){i(r,e,t,n)},4),s},s.config=function(e){return s(e)},e._defined=a,n=function(e,t,n){t.splice||(n=t,t=[]),!v(a,e)&&!v(f,e)&&(f[e]=[e,t,n])},n.amd={jQuery:!0}}(),n("almond",function(){}),n("mock",[],function(){function e(e){if(e.type=="FUNCTION")return e.value();if(e.type=="EXCEPTION")throw e.value;return e.value}return function(t,n){var r=n&&n.runFunctions,i={};i._invocationCounts={},i._invocationCallbacks={},i._readCounts={},i._readCallbacks={},i._changeCounts={},i._writeCallbacks={},i._methods=[],i._members=[],i._stubs={};var s=function(e){console.log("MOCK [DEBUG] - registering member "+e),i._readCounts[e]=0,i._changeCounts[e]=0,i.__defineGetter__(e,function(){return console.log("MOCK [INFO] - getting "+e),i._readCounts[e]++,i._readCallbacks[e]instanceof Function&&i._readCallbacks[e](t[e]),t[e]}),i.__defineSetter__(e,function(n){console.log("MOCK [INFO] - setting "+e),t[e]!=n&&i._changeCounts[e]++,i._writeCallbacks[e]instanceof Function&&i._writeCallbacks[e](n),t[e]=n})},o=function(n){console.log("MOCK [DEBUG] - registering method "+n),i._invocationCounts[n]={all:0,arguments:{}},i._stubs[n]={arguments:{}},i[n]=function(){console.log("MOCK [INFO] - Verifying execution of "+n);var s=JSON.stringify(arguments),o;if(r)o=t[n].apply(t,arguments);else if(i._stubs[n].arguments[s]){var u=i._stubs[n].arguments[s];o=e(u)}else i._stubs[n].all?(u=i._stubs[n].all,o=e(u)):o=undefined;return i._invocationCounts[n].all++,i._invocationCounts[n][s]?i._invocationCounts[n][s]++:i._invocationCounts[n][s]=1,i._invocationCallbacks[n]instanceof Function&&i._invocationCallbacks[n](o,i._invocationCounts[n]),o},i[n].toString=function(){return"factmint.mock of "+n}};for(var u in t)t[u]instanceof Function?(o(u),i._methods.push(u)):(s(u),i._members.push(u));return i.toString=function(){return"\n   __         _         _     _                   _    \n  / _|__ _ __| |_ _ __ (_)_ _| |_   _ __  ___  __| |__ \n |  _/ _` / _|  _| '  \\| | ' \\  _| | '  \\/ _ \\/ _| / / \n |_| \\__,_\\__|\\__|_|_|_|_|_||_\\__| |_|_|_\\___/\\__|_\\_\\ \n "},i}}),n("verify",[],function(){return function(e){var t={};return e._members.forEach(function(n){t[n]={hasBeenRead:function(t){if(t instanceof Function)return t(e._readCounts[n]);if(typeof t=="number")return t==e._readCounts[n];if(!t)return e._readCounts[n]>0},checkGets:function(t){e._readCallbacks[n]=t},hasBeenChanged:function(t){if(t instanceof Function)return t(e._changeCounts[n]);if(typeof t=="number")return t==e._changeCounts[n];if(!t)return e._changeCounts[n]>0},checkSets:function(t){e._writeCallbacks[n]=t}}}),e._methods.forEach(function(n){t[n]={hasBeenInvoked:function(t){if(t instanceof Function)return t(e._invocationCounts[n].all);if(typeof t=="number")return t==e._invocationCounts[n].all;if(!t)return e._invocationCounts[n].all>0},withArguments:function(){var t=JSON.stringify(arguments);return{hasBeenInvoked:function(r){if(r instanceof Function)return r(e._invocationCounts[n][t]);if(typeof r=="number")return r==0&&typeof e._invocationCounts[n][t]=="undefined"?!0:r==e._invocationCounts[n][t];if(!r)return e._invocationCounts[n][t]>0}}},checkInvocations:function(t){e._invocationCallbacks[n]=t}}}),t}}),n("global",["mock","verify"],function(e,t){return{mock:e,verify:t}}),t("global")});
+var requirejs, require, define;
+(function (undef) {
+    var main, req, makeMap, handlers,
+        defined = {},
+        waiting = {},
+        config = {},
+        defining = {},
+        hasOwn = Object.prototype.hasOwnProperty,
+        aps = [].slice,
+        jsSuffixRegExp = /\.js$/;
+
+    function hasProp(obj, prop) {
+        return hasOwn.call(obj, prop);
+    }
+
+    /**
+     * Given a relative module name, like ./something, normalize it to
+     * a real name that can be mapped to a path.
+     * @param {String} name the relative name
+     * @param {String} baseName a real name that the name arg is relative
+     * to.
+     * @returns {String} normalized name
+     */
+    function normalize(name, baseName) {
+        var nameParts, nameSegment, mapValue, foundMap, lastIndex,
+            foundI, foundStarMap, starI, i, j, part,
+            baseParts = baseName && baseName.split("/"),
+            map = config.map,
+            starMap = (map && map['*']) || {};
+
+        //Adjust any relative paths.
+        if (name && name.charAt(0) === ".") {
+            //If have a base name, try to normalize against it,
+            //otherwise, assume it is a top-level require that will
+            //be relative to baseUrl in the end.
+            if (baseName) {
+                //Convert baseName to array, and lop off the last part,
+                //so that . matches that "directory" and not name of the baseName's
+                //module. For instance, baseName of "one/two/three", maps to
+                //"one/two/three.js", but we want the directory, "one/two" for
+                //this normalization.
+                baseParts = baseParts.slice(0, baseParts.length - 1);
+                name = name.split('/');
+                lastIndex = name.length - 1;
+
+                // Node .js allowance:
+                if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
+                    name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '');
+                }
+
+                name = baseParts.concat(name);
+
+                //start trimDots
+                for (i = 0; i < name.length; i += 1) {
+                    part = name[i];
+                    if (part === ".") {
+                        name.splice(i, 1);
+                        i -= 1;
+                    } else if (part === "..") {
+                        if (i === 1 && (name[2] === '..' || name[0] === '..')) {
+                            //End of the line. Keep at least one non-dot
+                            //path segment at the front so it can be mapped
+                            //correctly to disk. Otherwise, there is likely
+                            //no path mapping for a path starting with '..'.
+                            //This can still fail, but catches the most reasonable
+                            //uses of ..
+                            break;
+                        } else if (i > 0) {
+                            name.splice(i - 1, 2);
+                            i -= 2;
+                        }
+                    }
+                }
+                //end trimDots
+
+                name = name.join("/");
+            } else if (name.indexOf('./') === 0) {
+                // No baseName, so this is ID is resolved relative
+                // to baseUrl, pull off the leading dot.
+                name = name.substring(2);
+            }
+        }
+
+        //Apply map config if available.
+        if ((baseParts || starMap) && map) {
+            nameParts = name.split('/');
+
+            for (i = nameParts.length; i > 0; i -= 1) {
+                nameSegment = nameParts.slice(0, i).join("/");
+
+                if (baseParts) {
+                    //Find the longest baseName segment match in the config.
+                    //So, do joins on the biggest to smallest lengths of baseParts.
+                    for (j = baseParts.length; j > 0; j -= 1) {
+                        mapValue = map[baseParts.slice(0, j).join('/')];
+
+                        //baseName segment has  config, find if it has one for
+                        //this name.
+                        if (mapValue) {
+                            mapValue = mapValue[nameSegment];
+                            if (mapValue) {
+                                //Match, update name to the new value.
+                                foundMap = mapValue;
+                                foundI = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (foundMap) {
+                    break;
+                }
+
+                //Check for a star map match, but just hold on to it,
+                //if there is a shorter segment match later in a matching
+                //config, then favor over this star map.
+                if (!foundStarMap && starMap && starMap[nameSegment]) {
+                    foundStarMap = starMap[nameSegment];
+                    starI = i;
+                }
+            }
+
+            if (!foundMap && foundStarMap) {
+                foundMap = foundStarMap;
+                foundI = starI;
+            }
+
+            if (foundMap) {
+                nameParts.splice(0, foundI, foundMap);
+                name = nameParts.join('/');
+            }
+        }
+
+        return name;
+    }
+
+    function makeRequire(relName, forceSync) {
+        return function () {
+            //A version of a require function that passes a moduleName
+            //value for items that may need to
+            //look up paths relative to the moduleName
+            var args = aps.call(arguments, 0);
+
+            //If first arg is not require('string'), and there is only
+            //one arg, it is the array form without a callback. Insert
+            //a null so that the following concat is correct.
+            if (typeof args[0] !== 'string' && args.length === 1) {
+                args.push(null);
+            }
+            return req.apply(undef, args.concat([relName, forceSync]));
+        };
+    }
+
+    function makeNormalize(relName) {
+        return function (name) {
+            return normalize(name, relName);
+        };
+    }
+
+    function makeLoad(depName) {
+        return function (value) {
+            defined[depName] = value;
+        };
+    }
+
+    function callDep(name) {
+        if (hasProp(waiting, name)) {
+            var args = waiting[name];
+            delete waiting[name];
+            defining[name] = true;
+            main.apply(undef, args);
+        }
+
+        if (!hasProp(defined, name) && !hasProp(defining, name)) {
+            throw new Error('No ' + name);
+        }
+        return defined[name];
+    }
+
+    //Turns a plugin!resource to [plugin, resource]
+    //with the plugin being undefined if the name
+    //did not have a plugin prefix.
+    function splitPrefix(name) {
+        var prefix,
+            index = name ? name.indexOf('!') : -1;
+        if (index > -1) {
+            prefix = name.substring(0, index);
+            name = name.substring(index + 1, name.length);
+        }
+        return [prefix, name];
+    }
+
+    /**
+     * Makes a name map, normalizing the name, and using a plugin
+     * for normalization if necessary. Grabs a ref to plugin
+     * too, as an optimization.
+     */
+    makeMap = function (name, relName) {
+        var plugin,
+            parts = splitPrefix(name),
+            prefix = parts[0];
+
+        name = parts[1];
+
+        if (prefix) {
+            prefix = normalize(prefix, relName);
+            plugin = callDep(prefix);
+        }
+
+        //Normalize according
+        if (prefix) {
+            if (plugin && plugin.normalize) {
+                name = plugin.normalize(name, makeNormalize(relName));
+            } else {
+                name = normalize(name, relName);
+            }
+        } else {
+            name = normalize(name, relName);
+            parts = splitPrefix(name);
+            prefix = parts[0];
+            name = parts[1];
+            if (prefix) {
+                plugin = callDep(prefix);
+            }
+        }
+
+        //Using ridiculous property names for space reasons
+        return {
+            f: prefix ? prefix + '!' + name : name, //fullName
+            n: name,
+            pr: prefix,
+            p: plugin
+        };
+    };
+
+    function makeConfig(name) {
+        return function () {
+            return (config && config.config && config.config[name]) || {};
+        };
+    }
+
+    handlers = {
+        require: function (name) {
+            return makeRequire(name);
+        },
+        exports: function (name) {
+            var e = defined[name];
+            if (typeof e !== 'undefined') {
+                return e;
+            } else {
+                return (defined[name] = {});
+            }
+        },
+        module: function (name) {
+            return {
+                id: name,
+                uri: '',
+                exports: defined[name],
+                config: makeConfig(name)
+            };
+        }
+    };
+
+    main = function (name, deps, callback, relName) {
+        var cjsModule, depName, ret, map, i,
+            args = [],
+            callbackType = typeof callback,
+            usingExports;
+
+        //Use name if no relName
+        relName = relName || name;
+
+        //Call the callback to define the module, if necessary.
+        if (callbackType === 'undefined' || callbackType === 'function') {
+            //Pull out the defined dependencies and pass the ordered
+            //values to the callback.
+            //Default to [require, exports, module] if no deps
+            deps = !deps.length && callback.length ? ['require', 'exports', 'module'] : deps;
+            for (i = 0; i < deps.length; i += 1) {
+                map = makeMap(deps[i], relName);
+                depName = map.f;
+
+                //Fast path CommonJS standard dependencies.
+                if (depName === "require") {
+                    args[i] = handlers.require(name);
+                } else if (depName === "exports") {
+                    //CommonJS module spec 1.1
+                    args[i] = handlers.exports(name);
+                    usingExports = true;
+                } else if (depName === "module") {
+                    //CommonJS module spec 1.1
+                    cjsModule = args[i] = handlers.module(name);
+                } else if (hasProp(defined, depName) ||
+                           hasProp(waiting, depName) ||
+                           hasProp(defining, depName)) {
+                    args[i] = callDep(depName);
+                } else if (map.p) {
+                    map.p.load(map.n, makeRequire(relName, true), makeLoad(depName), {});
+                    args[i] = defined[depName];
+                } else {
+                    throw new Error(name + ' missing ' + depName);
+                }
+            }
+
+            ret = callback ? callback.apply(defined[name], args) : undefined;
+
+            if (name) {
+                //If setting exports via "module" is in play,
+                //favor that over return value and exports. After that,
+                //favor a non-undefined return value over exports use.
+                if (cjsModule && cjsModule.exports !== undef &&
+                        cjsModule.exports !== defined[name]) {
+                    defined[name] = cjsModule.exports;
+                } else if (ret !== undef || !usingExports) {
+                    //Use the return value from the function.
+                    defined[name] = ret;
+                }
+            }
+        } else if (name) {
+            //May just be an object definition for the module. Only
+            //worry about defining if have a module name.
+            defined[name] = callback;
+        }
+    };
+
+    requirejs = require = req = function (deps, callback, relName, forceSync, alt) {
+        if (typeof deps === "string") {
+            if (handlers[deps]) {
+                //callback in this case is really relName
+                return handlers[deps](callback);
+            }
+            //Just return the module wanted. In this scenario, the
+            //deps arg is the module name, and second arg (if passed)
+            //is just the relName.
+            //Normalize module name, if it contains . or ..
+            return callDep(makeMap(deps, callback).f);
+        } else if (!deps.splice) {
+            //deps is a config object, not an array.
+            config = deps;
+            if (config.deps) {
+                req(config.deps, config.callback);
+            }
+            if (!callback) {
+                return;
+            }
+
+            if (callback.splice) {
+                //callback is an array, which means it is a dependency list.
+                //Adjust args if there are dependencies
+                deps = callback;
+                callback = relName;
+                relName = null;
+            } else {
+                deps = undef;
+            }
+        }
+
+        //Support require(['a'])
+        callback = callback || function () {};
+
+        //If relName is a function, it is an errback handler,
+        //so remove it.
+        if (typeof relName === 'function') {
+            relName = forceSync;
+            forceSync = alt;
+        }
+
+        //Simulate async callback;
+        if (forceSync) {
+            main(undef, deps, callback, relName);
+        } else {
+            //Using a non-zero value because of concern for what old browsers
+            //do, and latest browsers "upgrade" to 4 if lower value is used:
+            //http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-windowtimers-settimeout:
+            //If want a value immediately, use require('id') instead -- something
+            //that works in almond on the global level, but not guaranteed and
+            //unlikely to work in other AMD implementations.
+            setTimeout(function () {
+                main(undef, deps, callback, relName);
+            }, 4);
+        }
+
+        return req;
+    };
+
+    /**
+     * Just drops the config on the floor, but returns req in case
+     * the config return value is used.
+     */
+    req.config = function (cfg) {
+        return req(cfg);
+    };
+
+    /**
+     * Expose module registry for debugging and tooling
+     */
+    requirejs._defined = defined;
+
+    define = function (name, deps, callback) {
+
+        //This module may not have dependencies
+        if (!deps.splice) {
+            //deps is not an array, so probably means
+            //an object literal or factory function for
+            //the value. Adjust args.
+            callback = deps;
+            deps = [];
+        }
+
+        if (!hasProp(defined, name) && !hasProp(waiting, name)) {
+            waiting[name] = [name, deps, callback];
+        }
+    };
+
+    define.amd = {
+        jQuery: true
+    };
+}());
+
+define("almond", function(){});
+
+define('mock',[],function() {
+	function evaluateStub(stub) {
+		if (stub.type == "FUNCTION") {
+			return stub.value();
+		} else if (stub.type == "EXCEPTION") {
+			throw stub.value;
+		} else {
+			return stub.value;
+		}
+	}
+	
+	return function(object, flags) {
+				
+		var runFunctions = (flags && flags.runFunctions);
+				
+		var mock = {};
+		mock._invocationCounts = {};
+		mock._invocationCallbacks = {};
+		mock._readCounts = {};
+		mock._readCallbacks = {};
+		mock._changeCounts = {};
+		mock._writeCallbacks = {};
+		mock._methods = [];
+		mock._members = [];
+		mock._stubs = {};
+		
+		var registerMember = function(memberName) {
+			console.log("MOCK [DEBUG] - registering member " + memberName);
+			
+			mock._readCounts[memberName] = 0;
+			mock._changeCounts[memberName] = 0;
+			
+			mock.__defineGetter__(memberName, function() {
+				console.log("MOCK [INFO] - getting " + memberName);
+				
+				mock._readCounts[memberName]++;
+				
+				if (mock._readCallbacks[memberName] instanceof Function) {
+					mock._readCallbacks[memberName](object[memberName]);
+				}
+				
+				return object[memberName];
+			});
+			mock.__defineSetter__(memberName, function(newValue) {
+				console.log("MOCK [INFO] - setting " + memberName);
+				
+				if (object[memberName] != newValue) {
+					mock._changeCounts[memberName]++;
+				}
+				
+				if (mock._writeCallbacks[memberName] instanceof Function) {
+					mock._writeCallbacks[memberName](newValue);
+				}
+				
+				object[memberName] = newValue;
+			});
+		};
+		
+		var registerMethod = function(methodName) {
+			console.log("MOCK [DEBUG] - registering method " + methodName);
+			
+			mock._invocationCounts[methodName] = {
+				all: 0,
+				arguments: {}
+			};
+			
+			mock._stubs[methodName] = {
+				arguments: {}
+			};
+			
+			mock[methodName] = function() {
+				console.log("MOCK [INFO] - Verifying execution of " + methodName);
+				
+				var argumentsKey = JSON.stringify(arguments);
+				
+				var result;
+				if (runFunctions) {
+					result = object[methodName].apply(object, arguments);
+				} else {
+					if (mock._stubs[methodName].arguments[argumentsKey]) {
+						var stub = mock._stubs[methodName].arguments[argumentsKey];
+						result = evaluateStub(stub);
+					} else if (mock._stubs[methodName].all) {
+						stub = mock._stubs[methodName].all;
+						result = evaluateStub(stub);
+					} else {
+						result = undefined;
+					}
+				}
+				
+				mock._invocationCounts[methodName].all++;
+				if (! mock._invocationCounts[methodName][argumentsKey]) {
+					mock._invocationCounts[methodName][argumentsKey] = 1;
+				} else {
+					mock._invocationCounts[methodName][argumentsKey]++;
+				}
+				
+				if (mock._invocationCallbacks[methodName] instanceof Function) {
+					mock._invocationCallbacks[methodName](result, mock._invocationCounts[methodName]);
+				}
+
+				return result;
+			};
+
+			mock[methodName].toString = function() {
+				return "factmint.mock of " + methodName;
+			}
+		};
+		
+		for (var member in object) {
+			if (object[member] instanceof Function) {
+					registerMethod(member);
+					mock._methods.push(member);
+			} else {
+					registerMember(member);
+					mock._members.push(member);
+			}
+		}
+
+		mock.toString = function() {
+			return  "\n   __         _         _     _                   _    " +
+					"\n  / _|__ _ __| |_ _ __ (_)_ _| |_   _ __  ___  __| |__ " +
+					"\n |  _/ _` / _|  _| '  \\| | ' \\  _| | '  \\/ _ \\/ _| / / " +
+					"\n |_| \\__,_\\__|\\__|_|_|_|_|_||_\\__| |_|_|_\\___/\\__|_\\_\\ " +
+					"\n ";
+		};
+		
+		return mock;
+	};
+});
+define('when',[],function() {
+	return function(mock) {
+		var when = {};
+		
+		mock._methods.forEach(function(methodName) {
+			when[methodName] = {
+				thenReturn: function(value) {
+					mock._stubs[methodName].all = {
+						type: "RETURN_VALUE",
+						value: value
+					};
+				},
+				thenThrow: function(value) {
+					mock._stubs[methodName].all = {
+						type: "EXCEPTION",
+						value: value
+					};
+				},
+				then: function(value) {
+					mock._stubs[methodName].all = {
+						type: "FUNCTION",
+						value: value
+					};
+				},
+				withArguments: function() {
+					var invocationArguments = JSON.stringify(arguments);
+					return {
+						thenReturn: function(value) {
+							mock._stubs[methodName].arguments[invocationArguments] = {
+								type: "RETURN_VALUE",
+								value: value
+							};
+						},
+						thenThrow: function(value) {
+							mock._stubs[methodName].arguments[invocationArguments] = {
+								type: "EXCEPTION",
+								value: value
+							};
+						},
+						then: function(value) {
+							mock._stubs[methodName].arguments[invocationArguments] = {
+								type: "FUNCTION",
+								value: value
+							};
+						}
+					}
+				}
+			};
+		});
+		
+		return when;
+	}
+});
+define('verify',[],function() {
+	return function(mock) {
+		var verify = {};
+		
+		mock._members.forEach(function(memberName) {
+			verify[memberName] = {
+				hasBeenRead: function(comparison) {
+					if (comparison instanceof Function) {
+						return comparison(mock._readCounts[memberName]);
+					} else if (typeof(comparison) == "number") {
+						return (comparison == mock._readCounts[memberName]);
+					} else if (! comparison) {
+						return mock._readCounts[memberName] > 0;
+					}
+				},
+				checkGets: function(callback) {
+					mock._readCallbacks[memberName] = callback;
+				},
+				hasBeenChanged: function(comparison) {
+					if (comparison instanceof Function) {
+						return comparison(mock._changeCounts[memberName]);
+					} else if (typeof(comparison) == "number") {
+						return (comparison == mock._changeCounts[memberName]);
+					} else if (! comparison) {
+						return mock._changeCounts[memberName] > 0;
+					}
+				},
+				checkSets: function(callback) {
+					mock._writeCallbacks[memberName] = callback;
+				}
+			};
+		});
+		
+		mock._methods.forEach(function(methodName) {
+			verify[methodName] = {
+				hasBeenInvoked: function(comparison) {
+					if (comparison instanceof Function) {
+						return comparison(mock._invocationCounts[methodName].all);
+					} else if (typeof(comparison) == "number") {
+						return (comparison == mock._invocationCounts[methodName].all);
+					} else if (! comparison) {
+						return mock._invocationCounts[methodName].all > 0;
+					}
+				},
+				withArguments: function() {
+					var invocationArguments = JSON.stringify(arguments);
+					return {
+						hasBeenInvoked: function(comparison) {
+							if (comparison instanceof Function) {
+								return comparison(mock._invocationCounts[methodName][invocationArguments]);
+							} else if (typeof(comparison) == "number") {
+								if (comparison == 0 && typeof(mock._invocationCounts[methodName][invocationArguments]) === "undefined") {
+									return true;
+								}
+	
+								return (comparison == mock._invocationCounts[methodName][invocationArguments]);
+							} else if (! comparison) {
+								return mock._invocationCounts[methodName][invocationArguments] > 0;
+							}
+						}
+					}
+				},
+				checkInvocations: function(callback) {
+					mock._invocationCallbacks[methodName] = callback;
+				}
+			};
+		});
+		
+		return verify;
+	}
+});
+define('global',['mock', 'when', 'verify'], function(mock, when, verify) {
+	return {
+		mock: mock,
+		when: when,
+		verify: verify
+	}
+});
+
+    return require('global');
+}));
