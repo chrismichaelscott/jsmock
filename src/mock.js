@@ -1,4 +1,14 @@
 define(function() {
+	function evaluateStub(stub) {
+		if (stub.type == "FUNCTION") {
+			return stub.value();
+		} else if (stub.type == "EXCEPTION") {
+			throw stub.value;
+		} else {
+			return stub.value;
+		}
+	}
+	
 	return function(object, flags) {
 				
 		var runFunctions = (flags && flags.runFunctions);
@@ -12,6 +22,7 @@ define(function() {
 		mock._writeCallbacks = {};
 		mock._methods = [];
 		mock._members = [];
+		mock._stubs = {};
 		
 		var registerMember = function(memberName) {
 			console.log("MOCK [DEBUG] - registering member " + memberName);
@@ -53,19 +64,31 @@ define(function() {
 				arguments: {}
 			};
 			
+			mock._stubs[methodName] = {
+				arguments: {}
+			};
+			
 			mock[methodName] = function() {
 				console.log("MOCK [INFO] - Verifying execution of " + methodName);
+				
+				var argumentsKey = JSON.stringify(arguments);
 				
 				var result;
 				if (runFunctions) {
 					result = object[methodName].apply(object, arguments);
 				} else {
-					result = undefined;
+					if (mock._stubs[methodName].arguments[argumentsKey]) {
+						var stub = mock._stubs[methodName].arguments[argumentsKey];
+						result = evaluateStub(stub);
+					} else if (mock._stubs[methodName].all) {
+						stub = mock._stubs[methodName].all;
+						result = evaluateStub(stub);
+					} else {
+						result = undefined;
+					}
 				}
 				
 				mock._invocationCounts[methodName].all++;
-				
-				var argumentsKey = JSON.stringify(arguments);
 				if (! mock._invocationCounts[methodName][argumentsKey]) {
 					mock._invocationCounts[methodName][argumentsKey] = 1;
 				} else {
