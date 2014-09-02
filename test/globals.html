@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Test jsmock</title>
+		<link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css">
+		<script src="../bower_components/qunit/qunit/qunit.js"></script>
+		<script src="../dist/global.js"></script>
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+		<script>
+			QUnit.test("Check the global modules have loaded", function(assert) {
+				assert.ok(jsmock.mock, "The mocker is set");
+				assert.ok(jsmock.verify, "The verify utility is set");
+				assert.ok(jsmock.when, "The when utility is set");
+			});
+		</script>
+	</body>
+</html>

@@ -14,10 +14,11 @@ require.config({
 	}
 });
 
-require(['QUnit', 'test-suite/loaded', 'test-suite/mock', 'test-suite/verify'], function(QUnit, test1, test2, test3) {
+require(['QUnit', 'test-suite/loaded', 'test-suite/mock', 'test-suite/when', 'test-suite/verify'], function(QUnit, test1, test2, test3, test4) {
 	test1();
 	test2();
 	test3();
+	test4();
 	
 	QUnit.load();
 	QUnit.start();
