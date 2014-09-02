@@ -48,6 +48,6 @@ define(function() {
 			};
 		});
 		
-		return verify;
+		return when;
 	}
 });
