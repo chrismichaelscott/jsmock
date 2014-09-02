@@ -1,0 +1,27 @@
+{
+  "name": "jsmock",
+  "version": "0.2.0",
+  "description": "JavaScript mocking utilitiy",
+  "main": "src/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrismichaelscott/jsmock.git"
+  },
+  "author": "chris.scott@factmint.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrismichaelscott/jsmock/issues"
+  },
+  "homepage": "https://github.com/chrismichaelscott/jsmock",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "requirejs": "^2.1.14",
+    "almond": "^0.3.0"
+  }
+}
