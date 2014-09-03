@@ -45,7 +45,7 @@ That works, but there are a few problems:
 
 jsmock, can be used to make this all a bit nicer. First, create a mock of the `factmint.service.visualizationPlugin`:
 
-      var mockVisualizationPluginService = factmint.mock({
+      var mockVisualizationPluginService = jsmock.mock({
         setPlugin: function(pluginId) {}
       });
 
@@ -54,7 +54,7 @@ Now you can verify things like the number of invokations:
     test("VisualizationPluginPickerControllerTest", function() {
       var testScope = {};
       
-      var mockVisualizationPluginService = factmint.mock({
+      var mockVisualizationPluginService = jsmock.mock({
         setPlugin: function(pluginId) {}
       });
       
@@ -64,15 +64,15 @@ Now you can verify things like the number of invokations:
       }
       testScope.update();
       
-      ok(factmint.verify(mockVisualizationPluginService).setPlugin.withArguments(99).hasBeenInvoked(), "The plugin ID was updated correctly");
+      ok(jsmock.verify(mockVisualizationPluginService).setPlugin.withArguments(99).hasBeenInvoked(), "The plugin ID was updated correctly");
     });
 
 ## How to use jsmock
-### factmint.mock
+### jsmock.mock
 
-The `factmint.mock` function creates a mock of any object. Use it like this:
+The `jsmock.mock` function creates a mock of any object. Use it like this:
 
-    var myMock = factmint.mock({
+    var myMock = jsmock.mock({
       name: "Chris",
       sex: "male",
       password: "itsasecret",
@@ -83,19 +83,19 @@ The `factmint.mock` function creates a mock of any object. Use it like this:
 
 or:
 
-    var myMock = factmint.mock(new User());
+    var myMock = jsmock.mock(new User());
 
-### factmint.verify
+### jsmock.verify
 
-The `factmint.verify` function takes a mocked object as its only argument:
+The `jsmock.verify` function takes a mocked object as its only argument:
 
     var myMock(new User());
-    factmint.verify(myMock);
+    jsmock.verify(myMock);
 
 To access to verification tools use the name of the mocked objects properties:
 
     var myMock(new User());
-    factmint.verify(myMock).name; // contains all of the verify methods for the "name" property
+    jsmock.verify(myMock).name; // contains all of the verify methods for the "name" property
 
 #### Checking that a property has been read
 
@@ -106,18 +106,18 @@ To access to verification tools use the name of the mocked objects properties:
 For example:
 
     var myMock(new User());
-    factmint.verify(myMock).name.hasBeenRead(); // returns false
+    jsmock.verify(myMock).name.hasBeenRead(); // returns false
     
     console.log(myMock.name);
-    factmint.verify(myMock).name.hasBeenRead(); // returns true
+    jsmock.verify(myMock).name.hasBeenRead(); // returns true
     
     console.log(myMock.name);
-    factmint.verify(myMock).name.hasBeenRead(); // returns true
-    factmint.verify(myMock).name.hasBeenRead(1); // returns false
-    factmint.verify(myMock).name.hasBeenRead(2); // returns true
+    jsmock.verify(myMock).name.hasBeenRead(); // returns true
+    jsmock.verify(myMock).name.hasBeenRead(1); // returns false
+    jsmock.verify(myMock).name.hasBeenRead(2); // returns true
     
     console.log(myMock.name);
-    factmint.verify(myMock).name.hasBeenRead(function(readCount) {
+    jsmock.verify(myMock).name.hasBeenRead(function(readCount) {
       return readCount % 2 == 0; // have an even number of reads occurred?
     }); // returns false
 
@@ -128,7 +128,7 @@ For example:
 For example:
 
     var myMock(new User());
-    factmint.verify(myMock).sex.checkGets(function(value) {
+    jsmock.verify(myMock).sex.checkGets(function(value) {
       console.log("sex " + value + " was read");
     });
     myMock.sex;
@@ -144,18 +144,18 @@ Note: a change means that the value of the property has become different, in a n
 For example:
 
     var myMock(new User());
-    factmint.verify(myMock).name.hasBeenChanged(); // returns false
+    jsmock.verify(myMock).name.hasBeenChanged(); // returns false
     
     myMock.name = "Christopher";
-    factmint.verify(myMock).name.hasBeenChanged(); // returns true
+    jsmock.verify(myMock).name.hasBeenChanged(); // returns true
     
     myMock.name = "Christopher";
-    factmint.verify(myMock).name.hasBeenChanged(2); // returns false
+    jsmock.verify(myMock).name.hasBeenChanged(2); // returns false
     
     myMock.name = "Alex";
-    factmint.verify(myMock).name.hasBeenChanged(2); // returns true
+    jsmock.verify(myMock).name.hasBeenChanged(2); // returns true
     
-    factmint.verify(myMock).name.hasBeenChanged(function(changeCount) {
+    jsmock.verify(myMock).name.hasBeenChanged(function(changeCount) {
       return changeCount % 2 == 0; // have an even number of changes occurred?
     }); // returns true
 
@@ -166,7 +166,7 @@ For example:
 For example:
 
     var myMock(new User());
-    factmint.verify(myMock).sex.checkSets(function(value) {
+    jsmock.verify(myMock).sex.checkSets(function(value) {
       console.log("sex was set as " + value);
     });
     myMock.sex = "male";
@@ -180,13 +180,13 @@ For example:
 For example:
 
     var myMock(new User());
-    factmint.verify(myMock).resetPassword.hasBeenInvoked(); // returns false
+    jsmock.verify(myMock).resetPassword.hasBeenInvoked(); // returns false
     
     myMock.resetPassword("nomypassword");
-    factmint.verify(myMock).resetPassword.hasBeenInvoked(); // returns true
-    factmint.verify(myMock).resetPassword.hasBeenInvoked(2); // returns false
+    jsmock.verify(myMock).resetPassword.hasBeenInvoked(); // returns true
+    jsmock.verify(myMock).resetPassword.hasBeenInvoked(2); // returns false
     
-    factmint.verify(myMock).resetPassword.hasBeenInvoked(function(invocationCount) {
+    jsmock.verify(myMock).resetPassword.hasBeenInvoked(function(invocationCount) {
       return invocationCount > 2 == 0; // has the function been invoked more than twice?
     }); // returns false
 
@@ -197,7 +197,7 @@ For example:
 For example:
 
     var myMock(new User());
-    factmint.verify(myMock).resetPassword.checkInvocations(function(resultFromCall, numberOfInvocations) {
+    jsmock.verify(myMock).resetPassword.checkInvocations(function(resultFromCall, numberOfInvocations) {
       console.log("The new password is a secret");
     });
     myMock.resetPassword("p4ssw0rd");
@@ -209,7 +209,7 @@ Both the `hasBeenInvoked` and `checkInvocation` methods can be be applied only w
 `withArguments([arg1][, arg2][, ...])` can be used as a filter on a function property. The result is an object with the same parameters, `checkInvocation` and `hasBeenInvoked`. An example use is:
 
     var myMock(new User());
-    factmint.verify(myMock).resetPassword.withArguments("password").checkInvocations(function(resultFromCall, numberOfInvocations) {
+    jsmock.verify(myMock).resetPassword.withArguments("password").checkInvocations(function(resultFromCall, numberOfInvocations) {
       console.log("the test password was applied");
     });
     myMock.resetPassword("secret"); // doesn't trigger checker
