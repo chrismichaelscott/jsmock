@@ -17,6 +17,17 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		comments: {
+			js: {
+				src: 'dist/global.js'
+			}
+		},
+		concat: {
+			dist: {
+				src: ['etc/licenseBanner.txt', 'dist/global.js'],
+				dest: 'dist/global.js'
+			}
+		},
 		connect: {
 			options: {
                 base: ".",
@@ -41,6 +52,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-stripcomments');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
-	grunt.registerTask('build', ['requirejs', 'connect:test', 'qunit']);
+	grunt.registerTask('build', ['requirejs', 'comments', 'concat', 'connect:test', 'qunit']);
 };

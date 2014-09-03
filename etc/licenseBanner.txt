@@ -1,0 +1,6 @@
+/**
+ * @license jsmock 0.3.1 Copyright (c) 2011-2014, chris.scott@factmint.com
+ * MIT license.
+ * see: http://github.com/chrismichaelscott/jsmock -> LICENSE.txt for details
+ * Includes https://github.com/jrburke/almond (MIT)
+ */
