@@ -2,6 +2,23 @@
 
 A light-weight JavaScript object mocking tool-kit. This project focuses on helping developers write clean, readable unit test with testing frameworks like QUnit.
 
+### In a nutshell:
+
+    var myMock = jsmock.mock(userRESTClient);
+    
+    // The user controller needs a REST client...
+    // but that's not goot for testing as the service may not be up
+    // so give it a mock
+    var controllerUnderTest = new userController(myMock);
+    
+    jsmock.when(myMock).getUsers.thenReturn(["Abe", "Bob", "Carol"]);
+    
+    QUnit.test("Ensure the user list is created", function(assert) {
+        var htmlSnippit = controllerUnderTest.getUserList();
+        // the controller itself is going to call "getUsers" on the rest client, but that has been stubbed
+        assert.equal(htmlSnippit, "<ul><li>Abe</li><li>Bob</li><li>Carol</li></ul>", "The HTML list is created");
+    });
+
 ## Seperation of concerns
 
 Consider the following code:
@@ -84,6 +101,46 @@ The `jsmock.mock` function creates a mock of any object. Use it like this:
 or:
 
     var myMock = jsmock.mock(new User());
+
+### jsmock.when
+
+This function is used to stub out functionality of the mock. This is particularly useful when testing a module with dependencies, where there should be a seperation of concerns.
+
+The `jsmock.when` function takes a mocked object as its only argument:
+
+    var myMock(new User());
+    jsmock.when(myMock);
+
+To access to stubbing tools use the name of the mocked objects function properties:
+
+    var myMock(new User());
+    jsmock.when(myMock).resetPassword; // contains all of the verify methods for the "name" property
+
+#### Stubbing out a function property
+
+`.thenReturn(value)` will cause the stubbed function to return `value`;
+`.thenThrow(value)` will cause the stubbed function to throw `value`;
+`.then(function)` will cause `function` to be ran instead of the stubbed function and it's return value returned in place;
+
+For example:
+
+    var myMock(new User());
+    jsmock.when(myMock).resetPassword.thenReturn("success");
+    
+    myMock.resetPassword(); // returns "success", regardless of the stubbed method
+
+#### Stubbing out a function property conditionally upon its arguments
+
+The `thenReturn`, `thenThrow` and `then` methods can be be applied only when sepcific arguments are used; this is achieved using the `.withArguments` method.
+
+`withArguments([arg1][, arg2][, ...])` can be used as a filter on a function property. This method is fluent and returns an object with the same properties. An example use is:
+
+    var myMock(new User());
+    jsmock.when(myMock).resetPassword.withArguments(rightPassword).thenReturn("success");
+    jsmock.when(myMock).resetPassword.withArguments(wrongPassword).thenReturn("failure");
+    
+    myMock.resetPassword(rightPassword); // returns "success", regardless of the stubbed method
+    myMock.resetPassword(wrongPassword); // returns "failure", regardless of the stubbed method
 
 ### jsmock.verify
 
