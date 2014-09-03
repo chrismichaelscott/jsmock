@@ -1,6 +1,6 @@
 {
   "name": "jsmock",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "JavaScript mocking utilitiy",
   "main": "src/main.js",
   "directories": {
@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/chrismichaelscott/jsmock",
   "devDependencies": {
-    "grunt": "^0.4.5",
     "almond": "^0.3.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-connect": "0.7.*",
+    "grunt-contrib-qunit": "git://github.com/chrismichaelscott/grunt-contrib-qunit.git",
     "grunt-contrib-requirejs": "^0.4.4"
   }
 }

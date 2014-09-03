@@ -16,9 +16,31 @@ module.exports = function(grunt) {
 					}
 				}
 			}
-		}
+		},
+		connect: {
+			options: {
+                base: ".",
+			},
+            test: {
+                options: {
+                    keepalive: false,
+                    port: 8001
+                }
+            }
+        },
+        qunit: {
+            checkBuild: {
+                options: {
+                    httpBase: 'http://localhost:8001'
+                },
+                src: 'test/globals.html'
+            }
+        }
 	});
 	
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
-	grunt.registerTask('build', ['requirejs']);
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+
+	grunt.registerTask('build', ['requirejs', 'connect:test', 'qunit']);
 };
