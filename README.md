@@ -2,7 +2,7 @@
 
 A light-weight JavaScript object mocking tool-kit. This project focuses on helping developers write clean, readable unit test with testing frameworks like QUnit.
 
-### In a nutshell:
+## In a nutshell:
 
     var myMock = jsmock.mock(userRESTClient);
     
@@ -19,7 +19,49 @@ A light-weight JavaScript object mocking tool-kit. This project focuses on helpi
         assert.equal(htmlSnippit, "<ul><li>Abe</li><li>Bob</li><li>Carol</li></ul>", "The HTML list is created");
     });
 
-## Seperation of concerns
+### Getting started
+
+#### Get the source
+
+jsmock is available as a [Bower](http://bower.io) component, so the easiest way to get it is:
+
+    bower install jsmock
+
+or, to add it to your bower.json
+
+    bower install --save-dev jsmock
+
+If you would prefer, you can just download the source from [here](https://s3-eu-west-1.amazonaws.com/chrisscott/jsmock/jsmock-0.3.1.js) or Github.
+
+#### Use it
+
+If you are using an AMD loader, like require.js, then you want something like this:
+
+    "use strict";
+    require.config({
+        paths: {
+		    'QUnit': 'bower_components/qunit/qunit/qunit',
+		    'mock': 'bower_components/jsmock/src/mock',
+		    'when': 'bower_components/jsmock/src/when',
+		    'verify': 'bower_components/jsmock/src/verify'
+        },
+    });
+	
+    require(['QUnit', 'mock', 'when', 'verify'], function(QUnit, mock, when, verify) {
+        // do some testing
+    });
+
+If you prefer a simple global, then use:
+
+    <script type="application/javascript" src="bower_components/jsmock/dist/global.js"></script>
+
+And in the test:
+
+    var myMock = jsmock.mock(someObject);
+
+## Why mock?
+
+Mocking and stubbing of code, particularly dependencies, is really useful when seperating concerns.
 
 Consider the following code:
 
