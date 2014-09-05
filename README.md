@@ -144,6 +144,10 @@ or:
 
     var myMock = jsmock.mock(new User());
 
+By default, the functionality of mocked objects will be stubbed out. You can allow the actual functions to run by supplying an option to `.mock()`:
+
+    var myMock = jsmock.mock(new User(), {runFunctions: true});
+
 ### jsmock.when
 
 This function is used to stub out functionality of the mock. This is particularly useful when testing a module with dependencies, where there should be a seperation of concerns.
