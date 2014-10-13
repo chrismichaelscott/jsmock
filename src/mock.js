@@ -1,7 +1,7 @@
 define(function() {
-	function evaluateStub(stub) {
+	function evaluateStub(stub, functionThis, callArguments) {
 		if (stub.type == "FUNCTION") {
-			return stub.value();
+			return stub.value.apply(functionThis, callArguments);
 		} else if (stub.type == "EXCEPTION") {
 			throw stub.value;
 		} else {
@@ -79,10 +79,10 @@ define(function() {
 				} else {
 					if (mock._stubs[methodName].arguments[argumentsKey]) {
 						var stub = mock._stubs[methodName].arguments[argumentsKey];
-						result = evaluateStub(stub);
+						result = evaluateStub(stub, this, arguments);
 					} else if (mock._stubs[methodName].all) {
 						stub = mock._stubs[methodName].all;
-						result = evaluateStub(stub);
+						result = evaluateStub(stub, this, arguments);
 					} else {
 						result = undefined;
 					}

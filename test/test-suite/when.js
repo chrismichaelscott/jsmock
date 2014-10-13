@@ -42,5 +42,15 @@ define(['QUnit', '../../src/mock', '../../src/when'], function(QUnit, mock, when
 			
 			assert.throws(testMock.get, testException, "The stubbed function should throw an exception");
 		});
+
+		QUnit.test( "Check that you can access arguments in a stub", function(assert) {
+			var testMock = mock(http);
+			
+			when(testMock).get.then(function(runtimeUrl) {
+				return runtimeUrl;
+			});
+
+			assert.equal(testMock.get("http://URL"), "http://URL", "The stubbed function has access the the runtime argument");
+		});
 	}
 });
