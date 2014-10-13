@@ -175,6 +175,37 @@ For example:
     
     myMock.resetPassword(); // returns "success", regardless of the stubbed method
 
+#### Accessing arguments of a subbed function
+
+In the case then one uses `.then(function)` to stub a function, the call arguments of the mocked function will be passed to the sub. This can be useful for dealing with callbacks. For example, consider the following object:
+
+    var httpService = {
+        get: function(url, callback) {
+            var xhr = new XMLHttpRequest();
+            // ..do some XHR setup
+            xhr.onreadstatechange = function() {
+            	callback(xhr.response);
+            }
+        }
+    };
+    
+    // usage:
+    httpService.get("http://test.com", function(message) {
+    	console.log(message);
+    }
+
+Here we may want to mock out the http call but still pass it's result to the callback. Just write the mock as if it had the same arguments:
+
+    var mockHttpService = jsmock.mock(httpService);
+    jsmock.when(mockHttpService).get.then(function(url, callback) {
+    	callback("I'm a response!");
+    });
+    
+    // usage:
+    mockHttpService.get("http://test.com", function(message) {
+    	message == "I'm a response!";
+    }
+
 #### Stubbing out a function property conditionally upon its arguments
 
 The `thenReturn`, `thenThrow` and `then` methods can be be applied only when sepcific arguments are used; this is achieved using the `.withArguments` method.
