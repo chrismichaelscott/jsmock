@@ -7,7 +7,7 @@ A light-weight JavaScript object mocking tool-kit. This project focuses on helpi
     var myMock = jsmock.mock(userRESTClient);
     
     // The user controller needs a REST client...
-    // but that's not goot for testing as the service may not be up
+    // but that's not good for testing as the service may not be up
     // so give it a mock
     var controllerUnderTest = new userController(myMock);
     
